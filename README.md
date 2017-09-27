@@ -26,3 +26,42 @@ Before running the tests make sure you are serving the app via `ng serve`.
 ## Further help
 
 To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI README](https://github.com/angular/angular-cli/blob/master/README.md).
+
+## Attribute directive
+``` 
+@input() defaultColor: string = 'transparent';
+@input('appBetterHighlight') highlightColor: string = 'blue';
+@HostBinding('style.backgroundColor') backgroundColor: string = this.defaultColor;
+
+constructor(private elementRef: ElementRef, private renderer: Renderer2) { 
+  this.backgroundColor = this.defaultColor;
+}
+
+ngOnInit() {
+//  this.renderer.setStyle(this.elementRef.nativeElement, 'background-color', 'blue', false, false);
+}
+
+@HostListener('mouseenter') mouseover(eventData: Event) {
+//  this.renderer.setStyle(this.elementRef.nativeElement, 'background-color', 'blue', false, false);
+  this.backgroundColor = this.highlightColor;
+}
+
+@HostListener('mouseleave') mouseleave(eventData: Event) {
+//  this.renderer.setStyle(this.elementRef.nativeElement, 'background-color', 'transparent', false, false);
+  this.backgroundColor = this.defaultColor;
+}
+```
+
+## Structural directive
+```
+@Input() set appUnless(condition: boolean) {
+  if (!condition) {
+    this.vcRef.createEmbeddedView(this.templateRef);
+  } else {
+    this.vcRef.clear();
+  }
+}
+
+constructor(private templateRef: TemplateRef<any>, private vcRef: ViewContainerRef) {
+}
+```
